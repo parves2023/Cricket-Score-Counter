@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cricket Score Counter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom Styles for Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 50;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+<div class="container mx-auto px-4 py-10">
+  <div class="bg-white rounded-lg shadow-lg p-6 text-center relative">
+    <h1 class="text-xl font-bold text-gray-800 mb-2">Cricket Score Counter</h1>
+
+    <!-- Toss Button -->
+    <button id="tossButton" class="absolute top-1 right-1 text-xs bg-green-500 text-white py-1 px-2 rounded hover:bg-green-600" onclick="openTossModal()">Toss</button>
+
+    <!-- Total Score Section -->
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold text-gray-700 mb-0">Total Score: <span id="totalScore">0</span></h2>
+      <p class="text-lg text-gray-600">Balls: <span id="ballCount">0</span> / 6</p>
+    </div>
+
+    <!-- Over Complete Message -->
+    <div id="overCompleteMessage" class="text-red-500 text-lg mb-4"></div>
+
+    <!-- Buttons for Runs and Extras -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(0)">Dot Ball</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(1)">1 Run</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(2)">2 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(3)">3 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(4)">4 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(6)">6 Runs</button>
+      <button class="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600" onclick="addWide()">Wide</button>
+      <button class="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600" onclick="openNoBallModal()">No Ball</button>
+      <button class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600" onclick="addWicket()">Wicket</button>
+    </div>
+
+    <!-- Over History -->
+    <div class="bg-gray-100 p-4 rounded-lg text-left">
+      <h3 class="text-lg font-semibold text-gray-700">Over History</h3>
+      <ul id="historyList" class="list-none mt-3"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- No Ball Modal -->
+<div id="noBallModal" class="modal">
+  <div class="modal-content">
+    <h2 class="text-2xl font-semibold mb-4">Select Runs on No Ball</h2>
+    <div class="grid grid-cols-2 gap-2 mb-4">
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(0)">0 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(1)">1 Run</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(2)">2 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(3)">3 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(4)">4 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(6)">6 Runs</button>
+    </div>
+    <button class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600" onclick="addNoBallWicket()">Wicket on No Ball</button>
+  </div>
+</div>
+
+<!-- Toss Modal -->
+<div id="tossModal" class="modal">
+  <div class="modal-content">
+    <h2 class="text-2xl font-semibold mb-4">Toss</h2>
+    <p class="mb-4">Select Heads or Tails:</p>
+    <div class="flex justify-center gap-4 mb-4">
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="handleToss('Heads')">Heads</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="handleToss('Tails')">Tails</button>
+    </div>
+    <p id="tossResult" class="text-lg font-semibold"></p>
+  </div>
+</div>
+
+<script>
+  let totalScore = 0;
+  let ballCount = 0;
+  let overNumber = 1;
+  let currentOver = [];
+  let currentOverScore = 0;
+
+  // Array of background colors for each over
+  const overColors = [
+    'bg-blue-100',
+    'bg-green-100',
+    'bg-yellow-100',
+    'bg-red-100',
+    'bg-purple-100',
+    'bg-pink-100',
+    'bg-teal-100'
+  ];
+
+  function addRun(run) {
+    if (ballCount < 6) {
+      totalScore += run;
+      currentOverScore += run;
+      ballCount++;
+      currentOver.push(run + " runs");
+      updateDisplay();
+    }
+  }
+
+  function addWide() {
+    totalScore += 1; // Add one run for wide
+    currentOver.push("Wide");
+    currentOverScore += 1; // Add wide run to the current over score
+    updateDisplay();
+  }
+
+  function addWicket() {
+    if (ballCount < 6) {
+      ballCount++;
+      currentOver.push("Wicket");
+      updateDisplay();
+    }
+  }
+
+  function updateDisplay() {
+    document.getElementById('totalScore').innerText = totalScore;
+    document.getElementById('ballCount').innerText = ballCount;
+
+    if (ballCount === 6) {
+      document.getElementById("overCompleteMessage").innerText = "Over Complete!";
+      setTimeout(completeOver, 1000); // Auto-start a new over after 1 second
+    }
+  }
+
+  function completeOver() {
+    const historyList = document.getElementById('historyList');
+    const overRecord = document.createElement('li');
+    
+    // Set the background color based on over number
+    const colorClass = overColors[(overNumber - 1) % overColors.length];
+    overRecord.classList.add('p-2', 'rounded', colorClass);
+    
+    overRecord.innerText = `Over ${overNumber}: ${currentOver.join(', ')} (Total: ${currentOverScore} runs)`;
+    historyList.appendChild(overRecord);
+
+    overNumber++;
+    currentOver = [];
+    currentOverScore = 0; // Reset current over score
+    ballCount = 0;
+    document.getElementById('ballCount').innerText = ballCount;
+    document.getElementById("overCompleteMessage").innerText = "";
+  }
+
+  // No Ball Modal logic
+  function openNoBallModal() {
+    document.getElementById('noBallModal').style.display = "block";
+  }
+
+  function addNoBallRuns(runs) {
+    totalScore += 1 + runs; // 1 run for No Ball + runs on No Ball
+    currentOverScore += 1 + runs; // 1 run for No Ball + runs on No Ball
+    currentOver.push("No Ball + " + runs + " runs");
+    updateDisplay();
+    document.getElementById('noBallModal').style.display = "none"; // Close modal
+  }
+
+  function addNoBallWicket() {
+    currentOver.push("Wicket on No Ball");
+    updateDisplay();
+    document.getElementById('noBallModal').style.display = "none"; // Close modal
+  }
+
+  // Toss Modal logic
+  function openTossModal() {
+    document.getElementById('tossModal').style.display = "block";
+  }
+
+  function handleToss(choice) {
+    const result = Math.random() < 0.5 ? 'Heads' : 'Tails'; // Randomly determine toss result
+    const tossResultText = `You chose ${choice}. Toss result is ${result}.`;
+    document.getElementById('tossResult').innerText = tossResultText;
+  }
+
+  // Close modal when clicking outside
+  window.onclick = function(event) {
+    const modals = document.getElementsByClassName('modal');
+    for (let i = 0; i < modals.length; i++) {
+      if (event.target === modals[i]) {
+        modals[i].style.display = "none"; // Close modal on outside click
+      }
+    }
+  }
+
+  // Close modal on Esc key
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      const modals = document.getElementsByClassName('modal');
+      for (let i = 0; i < modals.length; i++) {
+        modals[i].style.display = "none"; // Close modal on Esc key
+      }
+    }
+  });
+</script>
+</body>
+</html>
