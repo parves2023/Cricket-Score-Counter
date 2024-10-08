@@ -50,15 +50,22 @@
 
     <!-- Buttons for Runs and Extras -->
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(0)">Dot Ball</button>
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(1)">1 Run</button>
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(2)">2 Runs</button>
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(3)">3 Runs</button>
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(4)">4 Runs</button>
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addRun(6)">6 Runs</button>
-      <button class="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600" onclick="addWide()">Wide</button>
-      <button class="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600" onclick="openNoBallModal()">No Ball</button>
-      <button class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600" onclick="addWicket()">Wicket</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addRun(0)">Dot Ball</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addRun(1)">1 Run</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addRun(2)">2 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addRun(3)">3 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addRun(4)">4 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addRun(6)">6 Runs</button>
+      <button class="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-800 hover:ring-4" onclick="addWide()">Wide</button>
+      <button class="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-800 hover:ring-4" onclick="openNoBallModal()">No Ball</button>
+      <button class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-800 hover:ring-4" onclick="addWicket()">Wicket</button>
+    </div>
+
+    <!-- This overplop; -->
+    <div class="bg-gray-100 p-4 rounded-lg text-left my-4 relative">
+      <h3 class="text-lg font-semibold text-gray-700">This over</h3>
+      <ul id="thisover" class="list-none mt-3"></ul>
+      <button class="bg-red-500 text-white text-xs py-2 px-2 rounded hover:bg-red-800 hover:ring-4 absolute top-0 right-0" onclick="back()">Remove Over</button>
     </div>
 
     <!-- Over History -->
@@ -74,14 +81,14 @@
   <div class="modal-content">
     <h2 class="text-2xl font-semibold mb-4">Select Runs on No Ball</h2>
     <div class="grid grid-cols-2 gap-2 mb-4">
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(0)">0 Runs</button>
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(1)">1 Run</button>
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(2)">2 Runs</button>
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(3)">3 Runs</button>
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(4)">4 Runs</button>
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="addNoBallRuns(6)">6 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addNoBallRuns(0)">0 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addNoBallRuns(1)">1 Run</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addNoBallRuns(2)">2 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addNoBallRuns(3)">3 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addNoBallRuns(4)">4 Runs</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800 hover:ring-4" onclick="addNoBallRuns(6)">6 Runs</button>
     </div>
-    <button class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600" onclick="addNoBallWicket()">Wicket on No Ball</button>
+    <button class="bg-red-500 text-white py-2 px-4 rounded hover:bg-red-800 hover:outline" onclick="addNoBallWicket()">Wicket on No Ball</button>
   </div>
 </div>
 
@@ -91,8 +98,8 @@
     <h2 class="text-2xl font-semibold mb-4">Toss</h2>
     <p class="mb-4">Select Heads or Tails:</p>
     <div class="flex justify-center gap-4 mb-4">
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="handleToss('Heads')">Heads</button>
-      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600" onclick="handleToss('Tails')">Tails</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800" onclick="handleToss('Heads')">Heads</button>
+      <button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-800" onclick="handleToss('Tails')">Tails</button>
     </div>
     <p id="tossResult" class="text-lg font-semibold"></p>
   </div>
@@ -104,6 +111,14 @@
   let overNumber = 1;
   let currentOver = [];
   let currentOverScore = 0;
+
+  document.addEventListener('click', function() {
+    document.getElementById('thisover').innerHTML = currentOver.join(', ');
+});
+
+
+
+
 
   // Array of background colors for each over
   const overColors = [
@@ -157,7 +172,7 @@
     
     // Set the background color based on over number
     const colorClass = overColors[(overNumber - 1) % overColors.length];
-    overRecord.classList.add('p-2', 'rounded', colorClass);
+    overRecord.classList.add('p-2','my-3', 'rounded', colorClass);
     
     overRecord.innerText = `Over ${overNumber}: ${currentOver.join(', ')} (Total: ${currentOverScore} runs)`;
     historyList.appendChild(overRecord);
@@ -219,6 +234,17 @@
       }
     }
   });
+
+
+
+  function back() {
+   ballCount = 0;
+  currentOver.length = 0;
+  totalScore = totalScore - currentOverScore;
+  currentOverScore = 0;
+  updateDisplay();
+}
+
 </script>
 </body>
 </html>
